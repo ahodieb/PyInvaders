@@ -12,6 +12,7 @@ class Invader(pygame.sprite.Sprite):
         self.vectorY = 10
 
         self.screen = screen
+
         
     def update(self):
         if (self.active):

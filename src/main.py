@@ -54,6 +54,7 @@ def main():
                     game_loop = not game_loop
                 
         p.update()
+        # just for testing the invader
         invaders[1].active = True
         invaders[1].update()
         # in the new position
