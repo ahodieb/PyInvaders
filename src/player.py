@@ -23,5 +23,5 @@ class Player(pygame.sprite.Sprite):
         if keystate[pygame.K_RIGHT]:
             self.rect.move_ip(7, 0)
 
-        self.rect.clamp_ip(self.screen.get_rect())
+        #self.rect.clamp_ip(self.screen.get_rect())
 
