@@ -34,18 +34,16 @@ def main():
         bullets.append(copy.deepcopy(bullet))
         
     invaders = []
-    for i in range(MAX_BULLETS):
-        invaders.append(invader.Invader(0))
-        invaders.append(invader.Invader(1))
-    
-    
+    for i in range(MAX_INVADERS):
+        invaders.append(invader.Invader(invader1, screen))
+        invaders.append(invader.Invader(invader2, screen))
     
     p = player.Player(width, height, PLAYER_OFFSET, screen)
     
     while game_loop :       
         
         #clear old position
-        screen.blit(background,p.rect)
+        screen.blit(background, p.rect)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -56,7 +54,9 @@ def main():
                     game_loop = not game_loop
                 
         p.update()
-        #draw in the new position
+        invaders[1].active = True
+        invaders[1].update()
+        # in the new position
         screen.blit(p.img,p.rect)
         
         clock.tick(FPS)    

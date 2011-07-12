@@ -1,14 +1,22 @@
 import pygame
 
 class Invader(pygame.sprite.Sprite):
-    def __init__(self, kind):
-        if kind == 0:
-            self.image = self.rect = pygame.image.load("../gfx/invader1.png")
-        if kind == 1:
-            self.image = self.rect = pygame.image.load("../gfx/invader2.png")
-        self.image.set_colorkey((255, 0, 255))
+    def __init__(self, image, screen):
+        self.image = image
         
-        self.active = True
+        self.image.set_colorkey((255, 0, 255))
+        self.rect = self.image.get_rect(topleft = (0, 0)) 
+        
+        self.active = False
+        self.vectorX = 10
+        self.vectorY = 10
+
+        self.screen = screen
         
     def update(self):
-        pass
+        if (self.active):
+            self.rect.move_ip(self.vectorX, self.vectorY)
+            self.vectorX += 10
+            self.vectorY += 3
+            self.rect.clamp_ip(self.screen.get_rect())
+
