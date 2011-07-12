@@ -3,17 +3,18 @@ import pygame
 class Player(pygame.sprite.Sprite):
     def __init__(self, width, height, offset):
 
-        #pygame.sprite.Sprite.__init__(self)
+        pygame.sprite.Sprite.__init__(self)
         self.window_width = width
         self.window_height = height
-
-        self.img =  pygame.image.load('../gfx/player.png')
-        self.img.set_colorkey ((255, 0, 255))
+        self.offset = offset
+        
+        self.image =  pygame.image.load('../gfx/player.png')
+        self.image.set_colorkey ((255, 0, 255))
 
         # initial player position        
-        self.rect = self.img.get_rect().move(width/2, height - offset)
+        self.rect = self.image.get_rect().move(width/2, height - offset)
         
-    def update(self):
+    def update(self):        
         keystate = pygame.key.get_pressed()
         
         if keystate[pygame.K_LEFT]:
@@ -21,5 +22,8 @@ class Player(pygame.sprite.Sprite):
             
         if keystate[pygame.K_RIGHT]:
             self.rect.move_ip(7, 0)
-
+        
+        #move by mouse
+        #pos = x,y= pygame.mouse.get_pos()
+        #self.rect.midtop = (x,self.window_height-self.offset)
 
