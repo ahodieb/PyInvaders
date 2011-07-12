@@ -3,7 +3,7 @@ import player
 import invader
 
 def main():
-    FPS = 60
+    FPS = 20
     MAX_BULLETS = 10
     MAX_INVADERS = 4
     PLAYER_OFFSET = 25
@@ -35,15 +35,17 @@ def main():
         
     invaders = []
     for i in range(MAX_INVADERS):
-        invaders.append(invader.Invader(invader1, screen))
-        invaders.append(invader.Invader(invader2, screen))
+        invaders.append(invader.Invader(invader1))
+        invaders.append(invader.Invader(invader2))
     
-    p = player.Player(width, height, PLAYER_OFFSET, screen)
+    p = player.Player(width, height, PLAYER_OFFSET)
     
     while game_loop :       
         
         #clear old position
         screen.blit(background, p.rect)
+        for inv in invaders:
+            screen.blit(background,inv.rect)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -57,8 +59,19 @@ def main():
         # just for testing the invader
         invaders[1].active = True
         invaders[1].update()
+        screen.blit(invaders[1].image,invaders[1].rect)
+        
+        
         # in the new position
         screen.blit(p.img,p.rect)
+        
+        #adding all invaders 
+        for inv in invaders:
+            inv.active = True
+            inv.update()
+            screen.blit(inv.image,inv.rect)
+            #to slow things a bit
+            pygame.time.wait(50)
         
         clock.tick(FPS)    
         pygame.display.update()

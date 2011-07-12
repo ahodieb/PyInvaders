@@ -1,12 +1,11 @@
 import pygame
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, width, height, offset, Screen):
+    def __init__(self, width, height, offset):
 
         #pygame.sprite.Sprite.__init__(self)
         self.window_width = width
         self.window_height = height
-        self.screen = Screen
 
         self.img =  pygame.image.load('../gfx/player.png')
         self.img.set_colorkey ((255, 0, 255))
@@ -23,5 +22,4 @@ class Player(pygame.sprite.Sprite):
         if keystate[pygame.K_RIGHT]:
             self.rect.move_ip(7, 0)
 
-        self.rect.clamp_ip(self.screen.get_rect())
 
