@@ -1,29 +1,27 @@
 import pygame
 
-class Player():
-    def __init__(self,width,height,offset,Speed,Screen):
+class Player(pygame.sprite.Sprite):
+    def __init__(self, width, height, offset, Screen):
 
         #pygame.sprite.Sprite.__init__(self)
-                
-        #self.x_pos = width/2
-        #self.y_pos = height - offset
-        self.speed = Speed
-        
         self.window_width = width
         self.window_height = height
-        
+        self.screen = Screen
+
         self.img =  pygame.image.load('../gfx/player.png')
-        self.img.set_colorkey ((255,0,255))
+        self.img.set_colorkey ((255, 0, 255))
+
+        # initial player position        
+        self.rect = self.img.get_rect().move(width/2, height - offset)
         
-        self.rect = self.img.get_rect().move(width/2,height - offset)
+    def update(self):
+        keystate = pygame.key.get_pressed()
         
-        
-    def move(self,direction):
-        #1 = right
-        #0 = left
-        if direction : self.rect.move_ip(self.speed,0)
-        else : self.rect.move_ip(-self.speed,0)
-        
-        if self.rect.left < 0 : self.rect.left = 0
-        if self.rect.right >self.window_width : self.rect.right = self.window_width
-        
+        if keystate[pygame.K_LEFT]:
+            self.rect.move_ip(-7, 0)
+            
+        if keystate[pygame.K_RIGHT]:
+            self.rect.move_ip(7, 0)
+
+        self.rect.clamp_ip(self.screen.get_rect())
+

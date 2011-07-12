@@ -6,13 +6,12 @@ def main():
     MAX_BULLETS = 10
     MAX_INVADERS = 4
     PLAYER_OFFSET = 25
-    PLAYER_SPEED = 50
     game_loop = True
     
     pygame.init()
     
     clock = pygame.time.Clock()
-    size = width , height = 800 , 600
+    size = width , height = 600 , 468
     screen = pygame.display.set_mode(size)
     
     icon = pygame.image.load('../gfx/icon.png')
@@ -40,7 +39,7 @@ def main():
     
     
     
-    p = player.Player(width,height,PLAYER_OFFSET,PLAYER_SPEED,screen)
+    p = player.Player(width, height, PLAYER_OFFSET, screen)
     
     while game_loop :       
         
@@ -48,23 +47,16 @@ def main():
         screen.blit(background,p.rect)
         
         for event in pygame.event.get():
-            if event.type == pygame.QUIT : game_loop = not game_loop
+            if event.type == pygame.QUIT:
+                game_loop = not game_loop
             
             
             
-            if event.type == pygame.KEYDOWN :
-                if event.key == pygame.K_ESCAPE:game_loop = not game_loop
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    game_loop = not game_loop
                 
-                
-                if event.key == pygame.K_LEFT: 
-                    #p.rect.move_ip(-PLAYER_SPEED,0)
-                    p.move(0)
-                if event.key == pygame.K_RIGHT: 
-                    #p.rect.move_ip(PLAYER_SPEED,1)
-                    p.move(1)
-
-        
-
+        p.update()
         #draw in the new position
         screen.blit(p.img,p.rect)
         
