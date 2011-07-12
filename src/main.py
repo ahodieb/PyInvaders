@@ -1,5 +1,6 @@
 import pygame,sys,copy
 import player
+import invader
 
 def main():
     FPS = 60
@@ -34,8 +35,8 @@ def main():
         
     invaders = []
     for i in range(MAX_BULLETS):
-        invaders.append(copy.deepcopy(invader1))
-        invaders.append(copy.deepcopy(invader2))
+        invaders.append(invader.Invader(0))
+        invaders.append(invader.Invader(1))
     
     
     
@@ -48,9 +49,7 @@ def main():
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                game_loop = not game_loop
-            
-            
+                game_loop = not game_loop            
             
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
