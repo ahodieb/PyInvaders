@@ -3,6 +3,9 @@ import pygame,random
 
 class Invader(pygame.sprite.Sprite):
     def __init__(self, image):
+        
+        pygame.sprite.Sprite.__init__(self)
+
         self.image = image
         
         self.image.set_colorkey((255, 0, 255))
@@ -19,6 +22,6 @@ class Invader(pygame.sprite.Sprite):
         if (self.active):
             random.seed()
             self.rect.move_ip(self.vectorX, self.vectorY)
-            self.vectorX += random.randint(0,10)
-            self.vectorY += random.randint(0,10)
+            self.vectorX += random.randint(0,5)
+            self.vectorY += random.randint(0,5)
 
