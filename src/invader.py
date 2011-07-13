@@ -12,16 +12,26 @@ class Invader(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft = (0, 0)) 
         
         self.active = False
-        self.vectorX = 1
-        self.vectorY = 3
-        
+        self.vectorX = 0
+        self.vectorY = 0
+
+        self.movement_type = 0
+        self.time_delay = 0
         
         
     def update(self):
-        
+        random.seed()
+
         if (self.active):
-            random.seed()
-            self.rect.move_ip(self.vectorX, self.vectorY)
-            self.vectorX += random.randint(0,5)
-            self.vectorY += random.randint(0,5)
+            if self.movement_type == 0:
+                # in this movement type the invader moves a long only one of x, y
+                select_coordinate = random.randint(0, 1)
+                if select_coordinate == 0:
+                    # move a long x coordinate
+                    self.rect.move_ip(self.vectorX, self.vectorY)
+                    self.vectorX += random.randint(0, 5)
+
+        if self.rect.centerx  == 600 or self.rect.centery == 468:
+            self.active = False
+
 

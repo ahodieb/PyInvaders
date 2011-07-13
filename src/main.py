@@ -1,14 +1,14 @@
-import pygame,sys,copy
+import pygame, os, copy, random
 import player
 import invader
 
 def main():
     FPS = 60
     MAX_BULLETS = 10
-    MAX_INVADERS = 4
+    MAX_INVADERS = 1
     PLAYER_OFFSET = 25
     game_loop = True
-    input_type = True
+    input_type = False
     
     pygame.init()
     
@@ -47,13 +47,17 @@ def main():
     #objects.append(p)
     objects.extend(invaders)
     all_sprites = pygame.sprite.RenderPlain(objects)
+
+    #init the font module and load the font
+    pygame.font.init()
+    font = pygame.font.Font('../gfx/04b_25__.ttf', 12)
     
-    while game_loop :       
+    while game_loop:       
         
         #clearing screen
         for s in objects:
             screen.blit(background, s.rect)
-            
+        
         #watching for key events   
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -65,12 +69,25 @@ def main():
                     
                 #start activating invaders  
                 if event.key == pygame.K_p:
-                    for i in invaders:i.active = not i.active
+                    for i in invaders:
+                        i.active = not i.active
+                        i.rect.top = random.randint(0, (height - 64) / 32) * 32
+                        i.rect.left = -32
 
                 #switching betweent keyboard and mouse
                 if event.key == pygame.K_k:
                     input_type = not input_type
-                
+                    
+                    
+        # hints and shortcuts to be printed
+        screen.blit(font.render("Press k to switch input", 0, ((255, 206, 0))), (460, 5))
+
+        if input_type is True:
+            screen.blit(font.render("current input: " + "keyboard", 0, ((255, 0, 0))), (465, 20))
+        
+        else:
+            screen.blit(font.render("current input: " + "mouse", 0, ((255, 0, 0))), (465, 20))
+            
 
         p.update(input_type)
         screen.blit(p.image,p.rect)
@@ -80,6 +97,7 @@ def main():
                 
         clock.tick(FPS)
         pygame.display.flip()
+        
     pygame.quit()
     
     
