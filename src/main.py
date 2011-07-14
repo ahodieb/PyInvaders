@@ -1,14 +1,14 @@
 import pygame, os, copy, random
 import player
 import invader
+import resource_loader
 
 def main():
     FPS = 60
     MAX_BULLETS = 10
-    MAX_INVADERS = 1
-    PLAYER_OFFSET = 25
+    MAX_INVADERS = 5
     game_loop = True
-    input_type = False
+    input_type = True
     
     pygame.init()
     
@@ -17,8 +17,10 @@ def main():
     screen = pygame.display.set_mode(size)
     
     icon = pygame.image.load('../gfx/icon.png')
-    invader1 = pygame.image.load('../gfx/invader1.png').convert()
-    invader2 = pygame.image.load('../gfx/invader2.png').convert()
+    
+    invader1_images = resource_loader.load_sprite_images('invader1.png',32)
+    invader2_images = resource_loader.load_sprite_images('invader2.png',32)
+    
     bullet = pygame.image.load('../gfx/bullet1.png').convert()
     
     #this background should be replaced by the background image
@@ -37,10 +39,10 @@ def main():
         
     invaders = []
     for i in range(MAX_INVADERS):
-        invaders.append(invader.Invader(invader1))
-        invaders.append(invader.Invader(invader2))
+        invaders.append(invader.Invader(invader1_images))
+        invaders.append(invader.Invader(invader2_images))
     
-    p = player.Player(width, height, PLAYER_OFFSET)
+    p = player.Player()
     
     
     objects = []
@@ -49,12 +51,14 @@ def main():
     all_sprites = pygame.sprite.RenderPlain(objects)
 
     #init the font module and load the font
-    pygame.font.init()
-    font = pygame.font.Font('../gfx/04b_25__.ttf', 12)
+    if pygame.font:        
+        pygame.font.init()
+        font = pygame.font.Font('../gfx/04b_25__.ttf', 12)
     
     while game_loop:       
         
         #clearing screen
+        screen.blit(background,p.rect)
         for s in objects:
             screen.blit(background, s.rect)
         
@@ -71,8 +75,8 @@ def main():
                 if event.key == pygame.K_p:
                     for i in invaders:
                         i.active = not i.active
-                        i.rect.top = random.randint(0, (height - 64) / 32) * 32
-                        i.rect.left = -32
+                        #i.rect.top = random.randint(0, (height - 64) / 32) * 32
+                        #i.rect.left = -32
 
                 #switching betweent keyboard and mouse
                 if event.key == pygame.K_k:
