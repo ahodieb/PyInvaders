@@ -7,11 +7,11 @@ class Invader(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.area = pygame.display.get_surface()
         self.area_rect = self.area.get_rect()   
+        self.images = images
         self.image = images[0]
-        self.images =images
         
-        startx = random.randint(0,self.area.get_width())
-        starty = random.randint(0,self.area.get_height()-100)
+        startx = random.randint(10, self.area.get_width() - 20)
+        starty = random.randint(35, self.area.get_height() - 100)
         
         self.rect = self.image.get_rect(topleft = (startx, starty)) 
         
@@ -21,23 +21,18 @@ class Invader(pygame.sprite.Sprite):
 
         self.movement_type = 0
         
-        
-        self.ANIM_DELAY = 8
+        self.ANIM_DELAY = 2
         self.anim_frame = 0
         self.anim_delay_count = 0
-        
-        
-        
         
     def update(self):
         random.seed()
         
-
-        
         if (self.active):
-            if self.anim_delay_count >self.ANIM_DELAY:
+            if self.anim_delay_count > self.ANIM_DELAY:
                 self.anim_delay_count = 0
-                if self.anim_frame >= len(self.images): self.anim_frame = 0        
+                if self.anim_frame >= len(self.images):
+                    self.anim_frame = 0        
                 self.image = self.images[self.anim_frame]
                 self.anim_frame +=1
                 
@@ -48,14 +43,12 @@ class Invader(pygame.sprite.Sprite):
     def _move(self):
         newpos = self.rect.move((self.vectorX,0))
         
-
         if not self.area_rect.contains(newpos):
-            if self.rect.left < self.area_rect.left or self.rect.right > self.area_rect.right :
+            if self.rect.left < self.area_rect.left or self.rect.right > self.area_rect.right:
                 self.vectorX = -self.vectorX
-                newpos = self.rect.move((self.vectorX,0))
+                newpos = self.rect.move((self.vectorX, 0))
         self.rect = newpos
-               
-            
+                          
 #            if self.movement_type == 0:
 #                # in this movement type the invader moves a long only one of x, y
 #                select_coordinate = random.randint(0, 1)
