@@ -12,6 +12,3 @@ class Bullet(pygame.sprite.Sprite):
 
         #bullet positioning
         self.rect = self.image.get_rect().move(player_pos) #player pos is a tuple of x, y
-
-        def update(self):
-            self.rect.move_ip(self.velocity, 0)

@@ -1,7 +1,8 @@
-import pygame, os, copy, random
+import pygame, os, random
 import player
 import invader
 import resource_loader
+import bullets
 
 def main():
     FPS = 60
@@ -38,10 +39,6 @@ def main():
     pygame.display.set_icon(icon)
     pygame.display.set_caption('PyInvaders')
     pygame.mouse.set_visible(0)
-    
-    bullets = []
-    for i in range(MAX_BULLETS):
-        bullets.append(copy.deepcopy(bullet))
         
     invaders = []
     for i in range(MAX_INVADERS):
@@ -49,6 +46,10 @@ def main():
         invaders.append(invader.Invader(invader2_images))
     
     p = player.Player()
+
+    bullets_arr = []
+    for i in range(MAX_BULLETS):
+        bullets_arr.append(bullets.Bullet((p.rect.centerx, p.rect.centery)))
     
     objects = []
     #objects.append(p)
@@ -60,14 +61,18 @@ def main():
         pygame.font.init()
         font = pygame.font.Font('../gfx/04b_25__.ttf', 12)
         font_big = pygame.font.Font('../gfx/04b_25__.ttf', 18)
-        font_title = pygame.font.Font('../gfx/04b_25__.ttf', 30)
+        font_title = pygame.font.Font('../gfx/04b_25__.ttf', 50)
 
     while main_loop:
+
+        #################
+        # TITLE SCREEN  #
+        #################
         
         if title_screen:
             screen.blit(background, background.get_rect())
 
-            screen.blit(font_title.render("PyInvaders", 0, ((255, 206, 0))), (230, 50))
+            screen.blit(font_title.render("PyInvaders", 0, ((255, 206, 0))), (205, 50))
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -94,17 +99,20 @@ def main():
                         title_screen = False
                         main_loop = False
                         
-            #handling menu choice
+            #handling menu choice switching
             if menu_choice == 0:
-                screen.blit(font_big.render("Start", 0, ((255, 0, 0))), (260, 100))
-                screen.blit(font_big.render("Exit", 0, ((255, 206, 0))), (260, 130))
+                screen.blit(font_big.render("Start", 0, ((255, 0, 0))), (290, 150))
+                screen.blit(font_big.render("Exit", 0, ((255, 206, 0))), (295, 180))
             else:
-                screen.blit(font_big.render("Start", 0, ((255, 206, 0))), (260, 100))
-                screen.blit(font_big.render("Exit", 0, ((255, 0, 0))), (260, 130))
+                screen.blit(font_big.render("Start", 0, ((255, 206, 0))), (290, 150))
+                screen.blit(font_big.render("Exit", 0, ((255, 0, 0))), (295, 180))
 
-        
         clock.tick(FPS)
         pygame.display.flip()
+
+        #################
+        #   GAME LOOP   #
+        #################
         
         if game_loop:       
             
@@ -133,7 +141,11 @@ def main():
 
                     #switching betweent keyboard and mouse
                     if event.key == pygame.K_k:
-                        input_type = not input_type  
+                        input_type = not input_type
+
+                    if event.key == pygame.K_z:
+                        for bullet in bullets_arr:
+                            screen.blit(bullet.image, bullet.rect)
                         
             #hints and shortcuts to be printed
             screen.blit(font.render("Press k to switch input", 0, ((255, 206, 0))), (460, 5))
@@ -144,7 +156,7 @@ def main():
             else:
                 screen.blit(font.render("current input: " + "mouse", 0, ((255, 0, 0))), (465, 20))
 
-            screen.blit(font_big.render("Score: " + str(player_score), 0, ((255, 206, 0))), (5, 5))
+            screen.blit(font_big.render("Score: " + str(player_score), 0, ((255, 206, 0))), (5, 5))         
 
 
             p.update(input_type)

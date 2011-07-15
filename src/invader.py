@@ -34,11 +34,11 @@ class Invader(pygame.sprite.Sprite):
                 if self.anim_frame >= len(self.images):
                     self.anim_frame = 0        
                 self.image = self.images[self.anim_frame]
-                self.anim_frame +=1
+                self.anim_frame += 1
                 
                 self._move()
                 
-            self.anim_delay_count +=1
+            self.anim_delay_count += 1
     
     def _move(self):
         newpos = self.rect.move((self.vectorX,0))
@@ -47,6 +47,7 @@ class Invader(pygame.sprite.Sprite):
             if self.rect.left < self.area_rect.left or self.rect.right > self.area_rect.right:
                 self.vectorX = -self.vectorX
                 newpos = self.rect.move((self.vectorX, 0))
+                
         self.rect = newpos
                           
 #            if self.movement_type == 0:

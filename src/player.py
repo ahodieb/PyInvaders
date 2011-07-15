@@ -1,18 +1,16 @@
 import pygame,resource_loader
 
 class Player(pygame.sprite.Sprite):
-    
-
     def __init__(self):
         self.PLAYER_OFFSET = 25
-        self.PLAYER_SPEED =  7 
+        self.PLAYER_SPEED =  10 
         pygame.sprite.Sprite.__init__(self)
         
         self.area = pygame.display.get_surface()
         self.area_rect = self.area.get_rect()    
-        self.image =  resource_loader.load_image('player.png', -1)
+        self.image = resource_loader.load_image('player.png', -1)
         
-        # initial player position        
+        #initial player position        
         self.rect = self.image.get_rect().move(self.area.get_width()/2, self.area.get_height() - self.PLAYER_OFFSET)
         
     def update(self, keyType):
