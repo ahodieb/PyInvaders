@@ -25,6 +25,8 @@ class Invader(pygame.sprite.Sprite):
         self.anim_frame = 0
         self.anim_delay_count = 0
         
+        self.health = 20
+        
     def update(self):
         random.seed()
         

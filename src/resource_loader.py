@@ -32,13 +32,15 @@ def load_sound(filename):
         def play(self) : pass
 
     if not pygame.mixer or not pygame.mixer.get_init():
+        print 'sound not enabled'
         return No_Sound()
 
-    fullname = os.path.join('../sound', filename)
-    if os.path.exists(fullname) == False:
+    fullname = os.path.join('../sounds', filename)
+    print fullname
+    if os.path.exists(fullname):
         sound = pygame.mixer.Sound(fullname)
     else:
-        print 'File %s does not exist!', filename
+        print 'File does not exist!', filename
         return No_Sound()
 
     return sound

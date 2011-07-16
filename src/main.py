@@ -2,7 +2,7 @@ import pygame, os, random
 import player
 import invader
 import resource_loader
-import bullets
+import bullet
 
 def main():
     FPS = 60
@@ -28,7 +28,9 @@ def main():
     invader1_images = resource_loader.load_sprite_images('invader1.png',32)
     invader2_images = resource_loader.load_sprite_images('invader2.png',32)
     
-    bullet = pygame.image.load('../gfx/bullet1.png').convert()
+    laser_sound = resource_loader.load_sound('lazer1.wav')
+    
+    #bullet = pygame.image.load('../gfx/bullet1.png').convert()
     
     #this background should be replaced by the background image
     background = pygame.surface.Surface(screen.get_size()).convert()
@@ -47,12 +49,8 @@ def main():
     
     p = player.Player()
 
-    bullets_arr = []
-    for i in range(MAX_BULLETS):
-        bullets_arr.append(bullets.Bullet((p.rect.centerx, p.rect.centery)))
-    
+    bullets = []    
     objects = []
-    #objects.append(p)
     objects.extend(invaders)
     all_sprites = pygame.sprite.RenderPlain(objects)
 
@@ -98,6 +96,7 @@ def main():
                     if event.key == pygame.K_RETURN and menu_choice == 1:
                         title_screen = False
                         main_loop = False
+                    
                         
             #handling menu choice switching
             if menu_choice == 0:
@@ -109,7 +108,8 @@ def main():
 
         clock.tick(FPS)
         pygame.display.flip()
-
+        screen.blit(background, background.get_rect())
+        
         #################
         #   GAME LOOP   #
         #################
@@ -117,7 +117,20 @@ def main():
         if game_loop:       
             
             #clearing screen
-            screen.blit(background, background.get_rect())
+            screen.blit(background, p.rect)
+            
+            #clearing in active bullets
+            bullets_to_remove =[]
+            for b in bullets:
+                if not b.active:
+                    bullets_to_remove.append(b)
+            for b in bullets_to_remove:
+                screen.blit(background,b.rect)
+                bullets.remove(b)
+                    
+            
+            
+                
             for s in objects:
                 screen.blit(background, s.rect)
             
@@ -144,9 +157,8 @@ def main():
                         input_type = not input_type
 
                     if event.key == pygame.K_z:
-                        for bullet in bullets_arr:
-                            screen.blit(bullet.image, bullet.rect)
-                        
+                        bullets.append(bullet.Bullet(p.rect.midtop))
+                        laser_sound.play()
             #hints and shortcuts to be printed
             screen.blit(font.render("Press k to switch input", 0, ((255, 206, 0))), (460, 5))
 
@@ -159,9 +171,14 @@ def main():
             screen.blit(font_big.render("Score: " + str(player_score), 0, ((255, 206, 0))), (5, 5))         
 
 
-            p.update(input_type)
+            p.update(input_type)            
             screen.blit(p.image, p.rect)
 
+            for b in bullets:
+                b.update()
+                player_score += len(b.hit_test(objects))
+                screen.blit(b.image,b.rect)
+                
             all_sprites.update()
             all_sprites.draw(screen)
                     
