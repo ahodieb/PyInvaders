@@ -36,7 +36,6 @@ def load_sound(filename):
         return No_Sound()
 
     fullname = os.path.join('../sounds', filename)
-    print fullname
     if os.path.exists(fullname):
         sound = pygame.mixer.Sound(fullname)
     else:

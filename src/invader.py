@@ -2,7 +2,7 @@ import pygame,random
 
 
 class Invader(pygame.sprite.Sprite):
-    def __init__(self, images):
+    def __init__(self, images,health):
         
         pygame.sprite.Sprite.__init__(self)
         self.area = pygame.display.get_surface()
@@ -25,10 +25,15 @@ class Invader(pygame.sprite.Sprite):
         self.anim_frame = 0
         self.anim_delay_count = 0
         
-        self.health = 20
+        self.health = health
+        
         
     def update(self):
         random.seed()
+        
+        if self.health <= 0 : 
+            self.active = False
+            
         
         if (self.active):
             if self.anim_delay_count > self.ANIM_DELAY:

@@ -29,6 +29,7 @@ def main():
     invader2_images = resource_loader.load_sprite_images('invader2.png',32)
     
     laser_sound = resource_loader.load_sound('lazer1.wav')
+    explosion_sound = resource_loader.load_sound('explode1.wav')
     
     #bullet = pygame.image.load('../gfx/bullet1.png').convert()
     
@@ -44,8 +45,8 @@ def main():
         
     invaders = []
     for i in range(MAX_INVADERS):
-        invaders.append(invader.Invader(invader1_images))
-        invaders.append(invader.Invader(invader2_images))
+        invaders.append(invader.Invader(invader1_images,10))
+        invaders.append(invader.Invader(invader2_images,20))
     
     p = player.Player()
 
@@ -124,6 +125,7 @@ def main():
             for b in bullets:
                 if not b.active:
                     bullets_to_remove.append(b)
+                    
             for b in bullets_to_remove:
                 screen.blit(background,b.rect)
                 bullets.remove(b)
@@ -176,7 +178,10 @@ def main():
 
             for b in bullets:
                 b.update()
-                player_score += len(b.hit_test(objects))
+                l = len(b.hit_test(objects))
+                player_score += l
+                if l > 0 : 
+                    explosion_sound.play()
                 screen.blit(b.image,b.rect)
                 
             all_sprites.update()
