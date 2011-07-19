@@ -35,7 +35,7 @@ def main():
     
     #this background should be replaced by the background image
     background = pygame.surface.Surface(screen.get_size()).convert()
-    background.fill((0, 0, 0))
+    background.fill((212, 203, 67))
     
     screen.blit(background, background.get_rect())
     
@@ -71,7 +71,7 @@ def main():
         if title_screen:
             screen.blit(background, background.get_rect())
 
-            screen.blit(font_title.render("PyInvaders", 0, ((255, 206, 0))), (205, 50))
+            screen.blit(font_title.render("PyInvaders", 0, ((197, 63, 60))), (205, 50))
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -101,11 +101,11 @@ def main():
                         
             #handling menu choice switching
             if menu_choice == 0:
-                screen.blit(font_big.render("Start", 0, ((255, 0, 0))), (290, 150))
-                screen.blit(font_big.render("Exit", 0, ((255, 206, 0))), (295, 180))
+                screen.blit(font_big.render("Start", 0, ((197, 63, 60))), (290, 150))
+                screen.blit(font_big.render("Exit", 0, ((82, 135, 175))), (295, 180))
             else:
-                screen.blit(font_big.render("Start", 0, ((255, 206, 0))), (290, 150))
-                screen.blit(font_big.render("Exit", 0, ((255, 0, 0))), (295, 180))
+                screen.blit(font_big.render("Start", 0, ((82, 135, 175))), (290, 150))
+                screen.blit(font_big.render("Exit", 0, ((197, 63, 60))), (295, 180))
 
         clock.tick(FPS)
         pygame.display.flip()
@@ -162,15 +162,15 @@ def main():
                         bullets.append(bullet.Bullet(p.rect.midtop))
                         laser_sound.play()
             #hints and shortcuts to be printed
-            screen.blit(font.render("Press k to switch input", 0, ((255, 206, 0))), (460, 5))
+            screen.blit(font.render("Press k to switch input", 0, ((197, 63, 60))), (460, 5))
 
             if input_type is True:
-                screen.blit(font.render("current input: " + "keyboard", 0, ((255, 0, 0))), (465, 20))
+                screen.blit(font.render("current input: " + "keyboard", 0, ((32, 135, 175))), (465, 20))
             
             else:
-                screen.blit(font.render("current input: " + "mouse", 0, ((255, 0, 0))), (465, 20))
+                screen.blit(font.render("current input: " + "mouse", 0, ((32, 135, 175))), (465, 20))
 
-            screen.blit(font_big.render("Score: " + str(player_score), 0, ((255, 206, 0))), (5, 5))         
+            screen.blit(font_big.render("Score: " + str(player_score), 0, ((197, 63, 60))), (5, 5))         
 
 
             p.update(input_type)            
