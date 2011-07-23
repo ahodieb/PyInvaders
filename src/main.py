@@ -1,4 +1,4 @@
-import pygame, os, random
+import pygame
 import player
 import invader
 import resource_loader
@@ -20,7 +20,7 @@ def main():
     pygame.init()
     
     clock = pygame.time.Clock()
-    size = width , height = 600 , 468
+    size = 600 , 468
     screen = pygame.display.set_mode(size)
     
     icon = pygame.image.load('../gfx/icon.png')
