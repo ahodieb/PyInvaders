@@ -195,7 +195,6 @@ def main():
                 b.update()
                 screen.blit(b.image,b.rect)
 
-
             clock.tick(FPS)
             pygame.display.flip()
         
