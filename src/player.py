@@ -3,7 +3,7 @@ import pygame,resource_loader
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         self.PLAYER_OFFSET = 25
-        self.PLAYER_SPEED =  10 
+        self.PLAYER_SPEED =  40 
         pygame.sprite.Sprite.__init__(self)
         
         self.area = pygame.display.get_surface()
