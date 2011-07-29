@@ -57,7 +57,7 @@ class Invader(pygame.sprite.Sprite):
             
             if not self.sound_playing:
                 self.sound_playing = True
-                self.properties.exp_sound.play()
+                self.properties.sound.play()
                 
             if self.anim_frame >= len(self.properties.exp_images):
                 self.dead = True   
@@ -89,11 +89,12 @@ class Invader(pygame.sprite.Sprite):
             hit = self.rect.colliderect(objects[i].rect)
             if hit : 
                 collisions.append(i)
-                self.health -= objects[i].damage
+                self.health -= objects[i].properties.damage
+                objects[i].exploding = True
                 if self.health <= 0 :
                     self.anim_frame = 0
                     self.exploding  = True
                 self.vectorX*=2 # increas speed after hit 
-                objects[i].active = False
+                #objects[i].active = False
         return collisions    
     

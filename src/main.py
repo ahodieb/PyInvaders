@@ -31,13 +31,16 @@ def main():
     invader1_images = resource_loader.load_sprite_images('invader1.png',32)
     invader2_images = resource_loader.load_sprite_images('invader2.png',32)
     exp_images = resource_loader.load_sprite_images('exp.png',32)
+    bullet1 = pygame.image.load('../gfx/bullet1.png')  
     
     laser_sound = resource_loader.load_sound('lazer1.wav')
     explosion_sound = resource_loader.load_sound('explode1.wav')
     
+    #loading function would be implemented to load those settings from xmlfiles
     invader1_properties = Invader_Properties(invader1_images,exp_images,explosion_sound,5,0,0,2,10)
     invader2_properties = Invader_Properties(invader2_images,exp_images,explosion_sound,5,0,0,2,20)
-    
+    #put room for images for the weopon to explode 
+    bullet1_properties  = Wepon__Properties([bullet1],[],laser_sound,0,10,0,2,10)
     #this background should be replaced by the background image
     background = pygame.surface.Surface(screen.get_size()).convert()
     background.fill((0, 0, 0))
@@ -165,13 +168,13 @@ def main():
 
                     #Fire bullets
                     if event.key == pygame.K_z:
-                        bullets.append(bullet.Bullet(p.rect.midtop))
-                        laser_sound.play()
+                        bullets.append(bullet.Bullet(bullet1_properties,p.rect.midtop))
+                        #laser_sound.play()
                         
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
-                        bullets.append(bullet.Bullet(p.rect.midtop))
-                        laser_sound.play()
+                        bullets.append(bullet.Bullet(bullet1_properties,p.rect.midtop))
+                        #laser_sound.play()
                         
             #hints and shortcuts to be printed
             screen.blit(font.render("Press k to switch input", 0, Red), (460, 5))
