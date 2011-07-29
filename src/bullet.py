@@ -21,33 +21,23 @@ class Bullet(pygame.sprite.Sprite):
     
     def update(self):
         
-        if (self.active):
-            if self.anim_delay_count > self.ANIM_DELAY:
-                self.anim_delay_count = 0
+        if (self.active):self._animate()
 
-                self._move()
                 
-            self.anim_delay_count += 1 
+            
+    def _animate(self):
+        if self.anim_delay_count > self.ANIM_DELAY:
+            self.anim_delay_count = 0
+            self._move()
+        self.anim_delay_count += 1 
                 
+                                    
     def _move(self):
         newpos = self.rect.move((0,-self.velocity))        
         if not self.area_rect.contains(newpos): self.active = False
         self.rect = newpos
 
  
-    def __del__(self):
-        print 'bullet removed'
+#    def __del__(self):
+#        print 'bullet removed'
  
-#    def hit_test(self,objects):
-#        collisions = []
-#        for i in xrange(len(objects)):
-#            
-#            hit = self.rect.colliderect(objects[i].rect)
-#            if hit : 
-#                collisions.append(i)
-#                #objects[i].active = False
-#                objects[i].health -= self.damage
-#                objects[i].vectorX*=2
-#        self.active = not len(collisions)
-#        return collisions
-        

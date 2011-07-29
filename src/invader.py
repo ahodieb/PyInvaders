@@ -1,69 +1,72 @@
 import pygame,random
 
-
 class Invader(pygame.sprite.Sprite):
-    def __init__(self, anim_images,exp_images,health):
+    def __init__(self, properties):
         
         pygame.sprite.Sprite.__init__(self)
         self.area = pygame.display.get_surface()
-        self.area_rect = self.area.get_rect()   
-        self.anim_images = anim_images
+        self.area_rect = self.area.get_rect()
+        self.properties = properties   
+        #self.anim_images = anim_images
+        #self.exp_images = exp_images
         
-        self.image = anim_images[0]
-        self.exp_images = exp_images
+        self.image = properties.anim_images[0]
         
         startx = random.randint(10, self.area.get_width() - 20)
         starty = random.randint(35, self.area.get_height() - 100)
         
         self.rect = self.image.get_rect(topleft = (startx, starty)) 
         
-        self.active = False
-        self.vectorX = 10
-        self.vectorY = 0
+        self.vectorX = self.properties.vectorX
+        self.vectorY = self.properties.vectorY
 
-        self.movement_type = 0
+        #self.movement_type = 0
         
-        self.ANIM_DELAY = 2
+        #self.ANIM_DELAY = 2
         self.anim_frame = 0
         self.anim_delay_count = 0
         
-        self.health = health
+        self.active = False
         self.dead = False
         self.exploding = False
+        self.sound_playing = False
+        self.health = self.properties.health
         
         
         
     def update(self):
-        random.seed()
-        
-#        if self.health <= 0 : 
-#            self.active = False
-#            
-        
-        if (self.active):
-            if self.anim_delay_count > self.ANIM_DELAY:
-                self.anim_delay_count = 0
-                if self.anim_frame >= len(self.anim_images):
-                    self.anim_frame = 0        
-                self.image = self.anim_images[self.anim_frame]
-                self.anim_frame += 1
+        if self.active: self._animate()
+        if self.exploding:self._explode()
+            
+    def _animate(self):
+        if self.anim_delay_count > self.properties.ANIM_DELAY:
+            self.anim_delay_count = 0
+            if self.anim_frame >= len(self.properties.anim_images):
+                self.anim_frame = 0        
+            self.image = self.properties.anim_images[self.anim_frame]
+            self.anim_frame += 1
                 
-                self._move()
+            self._move()
                 
-            self.anim_delay_count += 1
-            self.exploding = self.health <= 0
+        self.anim_delay_count += 1
+        #self.exploding = self.health <= 0
+        
+    def _explode(self):
+        if self.anim_delay_count > self.properties.ANIM_DELAY:
+            self.anim_delay_count = 0
             
-            
-        if self.exploding:
-            if self.anim_delay_count > self.ANIM_DELAY:
-                self.anim_delay_count = 0
-                if self.anim_frame >= len(self.exp_images):
-                    self.dead = True   
-                    return
-                self.image = self.exp_images[self.anim_frame]
-                self.anim_frame += 1            
-            
-
+            if not self.sound_playing:
+                self.sound_playing = True
+                self.properties.exp_sound.play()
+                
+            if self.anim_frame >= len(self.properties.exp_images):
+                self.dead = True   
+                
+                return
+            self.image = self.properties.exp_images[self.anim_frame]
+            self.anim_frame += 1     
+                       
+        
     def _move(self):
         newpos = self.rect.move((self.vectorX,0))
         
@@ -75,30 +78,22 @@ class Invader(pygame.sprite.Sprite):
         self.rect = newpos
    
      
-    def __del__(self):
-        print 'invader removed'
- 
+  
     def hit_test(self,objects):
+        if self.exploding or not self.active:
+            return []
+        
         collisions = []
         for i in xrange(len(objects)):
             
             hit = self.rect.colliderect(objects[i].rect)
             if hit : 
                 collisions.append(i)
-                #objects[i].active = False
                 self.health -= objects[i].damage
+                if self.health <= 0 :
+                    self.anim_frame = 0
+                    self.exploding  = True
                 self.vectorX*=2 # increas speed after hit 
                 objects[i].active = False
-                self.anim_frame = 0 # 3WZA NADAFA 
         return collisions    
-#            if self.movement_type == 0:
-#                # in this movement type the invader moves a long only one of x, y
-#                select_coordinate = random.randint(0, 1)
-#                if select_coordinate == 0:
-#                    # move a long x coordinate
-#                    self.rect.move_ip(self.vectorX, self.vectorY)
-#                    self.vectorX += random.randint(0, 5)
-#
-#        if self.rect.centerx  == 600 or self.rect.centery == 468:
-#            self.active = False
-
+    

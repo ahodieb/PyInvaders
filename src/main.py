@@ -3,6 +3,7 @@ import player
 import invader
 import resource_loader
 import bullet
+from properties import *
 
 def main():
     FPS = 60
@@ -34,6 +35,9 @@ def main():
     laser_sound = resource_loader.load_sound('lazer1.wav')
     explosion_sound = resource_loader.load_sound('explode1.wav')
     
+    invader1_properties = Invader_Properties(invader1_images,exp_images,explosion_sound,5,0,0,2,10)
+    invader2_properties = Invader_Properties(invader2_images,exp_images,explosion_sound,5,0,0,2,20)
+    
     #this background should be replaced by the background image
     background = pygame.surface.Surface(screen.get_size()).convert()
     background.fill((0, 0, 0))
@@ -46,8 +50,8 @@ def main():
         
     invaders = []
     for i in range(MAX_INVADERS):
-        invaders.append(invader.Invader(invader1_images,exp_images,10))
-        invaders.append(invader.Invader(invader2_images,exp_images,20))
+        invaders.append(invader.Invader(invader1_properties))
+        invaders.append(invader.Invader(invader2_properties))
     
     p = player.Player()
 
@@ -187,7 +191,8 @@ def main():
                 l = len(i.hit_test(bullets))
                 player_score += l
                 if l > 0 : 
-                    explosion_sound.play()
+                    #explosion_sound.play()
+                    pass
                 i.update()
                 screen.blit(i.image,i.rect)
                     

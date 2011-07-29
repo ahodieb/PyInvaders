@@ -40,3 +40,18 @@ class Player(pygame.sprite.Sprite):
             x, y = pygame.mouse.get_pos()
             self.rect.midtop = (x, self.area.get_height() - self.PLAYER_OFFSET)
 
+
+
+    def hit_test(self,objects):
+        collisions = []
+        for i in xrange(len(objects)):
+            
+            hit = self.rect.colliderect(objects[i].rect)
+            if hit : 
+                collisions.append(i)
+                #objects[i].active = False
+                self.health -= objects[i].damage
+                self.vectorX*=2 # increas speed after hit 
+                objects[i].active = False
+                self.anim_frame = 0 # 3WZA NADAFA 
+        return collisions   
