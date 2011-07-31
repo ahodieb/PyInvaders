@@ -5,29 +5,70 @@ import resource_loader
 import bullet
 from properties import *
 
+
+
+FPS = 60
+MAX_INVADERS = 5
+SIZE = height, width = 900, 560
+
+main_loop    = True
+title_screen = True
+game_loop    = False
+menu_choice  = 0
+input_type   = True
+player_score = 0
+
+#Color constants
+Red = (255, 0, 0)
+Blue = (0, 0, 255)
+
+clock  = pygame.time.Clock()
+screen = pygame.display.set_mode(SIZE)
+
+invader1_images = []
+invader2_images = []
+exp_images      = []
+bullet1         = None
+laser_sound     = None
+explosion_sound = None
+background      = None
+
+invaders = []
+p        = None
+bullets = []
+
 def main():
-    FPS = 60
-    MAX_INVADERS = 5
-    SIZE = height, width = 900, 560
+#    global FPS
+#    global MAX_INVADERS
+#    global SIZE
+#    global height
+#    global width
     
-    #Game controlling variables
-    main_loop = True
-    title_screen = True
-    game_loop = False
-    menu_choice = 0
-    input_type = True
-    player_score = 0
+    global main_loop  
+    global title_screen
+    global game_loop
+    global menu_choice 
+    global input_type
+    global player_score 
     
-    #Color constants
-    Red = (255, 0, 0)
-    Blue = (0, 0, 255)
+#    global clock
+#    global screen
     
-    pygame.init()
+    global invader1_images
+    global invader2_images
+    global exp_images
+    global bullet1
+    global laser_sound
+    global explosion_sound
+    global background
     
-    clock = pygame.time.Clock()    
-    screen = pygame.display.set_mode(SIZE)
+    global invaders
+    global p
+    global bullets
     
-    icon = pygame.image.load('../gfx/icon.png')    
+    pygame.init()    
+    icon = pygame.image.load('../gfx/icon.png') 
+       
     invader1_images = resource_loader.load_sprite_images('invader1.png',32)
     invader2_images = resource_loader.load_sprite_images('invader2.png',32)
     exp_images = resource_loader.load_sprite_images('exp.png',32)
@@ -41,6 +82,7 @@ def main():
     invader2_properties = Invader_Properties(invader2_images,exp_images,explosion_sound,5,0,0,2,20)
     #put room for images for the weopon to explode 
     bullet1_properties  = Wepon__Properties([bullet1],[],laser_sound,0,10,0,2,10)
+    
     #this background should be replaced by the background image
     background = pygame.surface.Surface(screen.get_size()).convert()
     background.fill((0, 0, 0))
@@ -51,18 +93,11 @@ def main():
     pygame.display.set_caption('PyInvaders')
     pygame.mouse.set_visible(0)
         
-    invaders = []
     for i in range(MAX_INVADERS):
         invaders.append(invader.Invader(invader1_properties))
         invaders.append(invader.Invader(invader2_properties))
     
     p = player.Player()
-
-    bullets = []    
-#    objects = []
-#    objects.extend(invaders)# to add other things than invaders , rocks , walls , other ships
-#    all_sprites = pygame.sprite.RenderPlain(objects)
-
     #init the font module and load the font
     if pygame.font:        
         pygame.font.init()
