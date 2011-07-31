@@ -85,16 +85,18 @@ class Invader(pygame.sprite.Sprite):
         
         collisions = []
         for i in xrange(len(objects)):
-            
+            if  objects[i].exploding:
+                continue
             hit = self.rect.colliderect(objects[i].rect)
             if hit : 
                 collisions.append(i)
                 self.health -= objects[i].properties.damage
+                self.vectorX *= -1
                 objects[i].exploding = True
                 if self.health <= 0 :
                     self.anim_frame = 0
                     self.exploding  = True
-                self.vectorX*=2 # increas speed after hit 
+                #self.vectorX*=2 # increas speed after hit 
                 #objects[i].active = False
         return collisions    
     

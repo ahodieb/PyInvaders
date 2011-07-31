@@ -36,7 +36,64 @@ background      = None
 invaders = []
 p        = None
 bullets = []
+bullet1_properties = None
 
+def Init_Env():
+    global icon
+    global background
+    global screen
+    
+    pygame.init()
+    icon = pygame.image.load('../gfx/icon.png') 
+    
+    pygame.display.set_icon(icon)
+    pygame.display.set_caption('PyInvaders')
+    pygame.mouse.set_visible(0)
+    
+    #this background should be replaced by the background image
+    background = pygame.surface.Surface(screen.get_size()).convert()
+    background.fill((0, 0, 0))
+    screen.blit(background, background.get_rect())
+
+def Init_Game():
+    global invader1_images
+    global invader2_images
+    global exp_images
+    global bullet1
+    global laser_sound
+    global explosion_sound
+    global background
+    
+    global bullets 
+    global invaders
+    global bullet1_properties
+    global p
+    
+    bullets = []
+    invaders = []
+    
+    invader1_images = resource_loader.load_sprite_images('invader1.png',32)
+    invader2_images = resource_loader.load_sprite_images('invader2.png',32)
+    exp_images = resource_loader.load_sprite_images('exp.png',32)
+    bullet1 = pygame.image.load('../gfx/bullet1.png')  
+    
+    laser_sound = resource_loader.load_sound('lazer1.wav')
+    explosion_sound = resource_loader.load_sound('explode1.wav')
+    
+    #loading function would be implemented to load those settings from xmlfiles
+    invader1_properties = Invader_Properties(invader1_images,exp_images,explosion_sound,5,0,0,2,10)
+    invader2_properties = Invader_Properties(invader2_images,exp_images,explosion_sound,5,0,0,2,20)
+    #put room for images for the weopon to explode 
+    bullet1_properties  = Wepon__Properties([bullet1],[],laser_sound,0,10,0,2,5)
+    
+
+    
+    for i in range(MAX_INVADERS):
+        invaders.append(invader.Invader(invader1_properties))
+        invaders.append(invader.Invader(invader2_properties))
+    
+    p = player.Player()
+    
 def main():
 #    global FPS
 #    global MAX_INVADERS
@@ -66,38 +123,38 @@ def main():
     global p
     global bullets
     
-    pygame.init()    
-    icon = pygame.image.load('../gfx/icon.png') 
+    #pygame.init()    
+    #icon = pygame.image.load('../gfx/icon.png') 
+    Init_Env()
+    #Init_Game()
        
-    invader1_images = resource_loader.load_sprite_images('invader1.png',32)
-    invader2_images = resource_loader.load_sprite_images('invader2.png',32)
-    exp_images = resource_loader.load_sprite_images('exp.png',32)
-    bullet1 = pygame.image.load('../gfx/bullet1.png')  
+#    invader1_images = resource_loader.load_sprite_images('invader1.png',32)
+#    invader2_images = resource_loader.load_sprite_images('invader2.png',32)
+#    exp_images = resource_loader.load_sprite_images('exp.png',32)
+#    bullet1 = pygame.image.load('../gfx/bullet1.png')  
+#    
+#    laser_sound = resource_loader.load_sound('lazer1.wav')
+#    explosion_sound = resource_loader.load_sound('explode1.wav')
+#    
+#    #loading function would be implemented to load those settings from xmlfiles
+#    invader1_properties = Invader_Properties(invader1_images,exp_images,explosion_sound,5,0,0,2,10)
+#    invader2_properties = Invader_Properties(invader2_images,exp_images,explosion_sound,5,0,0,2,20)
+#    #put room for images for the weopon to explode 
+#    bullet1_properties  = Wepon__Properties([bullet1],[],laser_sound,0,10,0,2,5)
+#    
+#    #this background should be replaced by the background image
+#    background = pygame.surface.Surface(screen.get_size()).convert()
+#    background.fill((0, 0, 0))
     
-    laser_sound = resource_loader.load_sound('lazer1.wav')
-    explosion_sound = resource_loader.load_sound('explode1.wav')
+#    screen.blit(background, background.get_rect())
     
-    #loading function would be implemented to load those settings from xmlfiles
-    invader1_properties = Invader_Properties(invader1_images,exp_images,explosion_sound,5,0,0,2,10)
-    invader2_properties = Invader_Properties(invader2_images,exp_images,explosion_sound,5,0,0,2,20)
-    #put room for images for the weopon to explode 
-    bullet1_properties  = Wepon__Properties([bullet1],[],laser_sound,0,10,0,2,10)
-    
-    #this background should be replaced by the background image
-    background = pygame.surface.Surface(screen.get_size()).convert()
-    background.fill((0, 0, 0))
-    
-    screen.blit(background, background.get_rect())
-    
-    pygame.display.set_icon(icon)
-    pygame.display.set_caption('PyInvaders')
-    pygame.mouse.set_visible(0)
+
         
-    for i in range(MAX_INVADERS):
-        invaders.append(invader.Invader(invader1_properties))
-        invaders.append(invader.Invader(invader2_properties))
+#    for i in range(MAX_INVADERS):
+#        invaders.append(invader.Invader(invader1_properties))
+#        invaders.append(invader.Invader(invader2_properties))
     
-    p = player.Player()
+#    p = player.Player()
     #init the font module and load the font
     if pygame.font:        
         pygame.font.init()
@@ -135,6 +192,7 @@ def main():
                     if event.key == pygame.K_RETURN and menu_choice == 0:
                         title_screen = False
                         game_loop = True
+                        Init_Game()
                         
                     #close the game  
                     if event.key == pygame.K_RETURN and menu_choice == 1:
@@ -164,7 +222,7 @@ def main():
             screen.blit(background, p.rect)
             
             #clearing in active bullets
-            bullets_to_remove = filter(lambda b : not b.active,bullets)
+            bullets_to_remove = filter(lambda b : b.destroyed,bullets)
             
             for b in bullets_to_remove:
                 screen.blit(background,b.rect)
@@ -196,6 +254,8 @@ def main():
                             i.active = not i.active
                             #i.rect.top = random.randint(0, (height - 64) / 32) * 32
                             #i.rect.left = -32
+                        for b in bullets :
+                            b.active = not b.active
 
                     #switching between keyboard and mouse
                     if event.key == pygame.K_k:

@@ -17,6 +17,7 @@ class Bullet(pygame.sprite.Sprite):
         #self.ANIM_DELAY = 2
         self.anim_frame = 0
         self.anim_delay_count = 0
+        self.destroyed = False
         self.exploding = False
         self.sound_playing = False
         
@@ -56,7 +57,7 @@ class Bullet(pygame.sprite.Sprite):
                 self.properties.sound.play()
                 
             if self.anim_frame >= len(self.properties.exp_images):
-                self.active = False   
+                self.destroyed = True   
                 
                 return
             self.image = self.properties.exp_images[self.anim_frame]
@@ -64,7 +65,7 @@ class Bullet(pygame.sprite.Sprite):
              
     def _move(self):
         newpos = self.rect.move((self.properties.vectorX,-self.properties.vectorY))        
-        if not self.area_rect.contains(newpos): self.active = False
+        if not self.area_rect.contains(newpos): self.destroyed = False
         self.rect = newpos
 
  
