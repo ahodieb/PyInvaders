@@ -88,28 +88,19 @@ def Init_Game():
     
 
     
-    for i in range(MAX_INVADERS):
+    for i in xrange(MAX_INVADERS):
         invaders.append(invader.Invader(invader1_properties))
         invaders.append(invader.Invader(invader2_properties))
     
     p = player.Player()
     
 def main():
-#    global FPS
-#    global MAX_INVADERS
-#    global SIZE
-#    global height
-#    global width
-    
     global main_loop  
     global title_screen
     global game_loop
     global menu_choice 
     global input_type
     global player_score 
-    
-#    global clock
-#    global screen
     
     global invader1_images
     global invader2_images
@@ -119,43 +110,16 @@ def main():
     global explosion_sound
     global background
     
+    
     global invaders
     global p
     global bullets
     
-    #pygame.init()    
-    #icon = pygame.image.load('../gfx/icon.png') 
     Init_Env()
     #Init_Game()
-       
-#    invader1_images = resource_loader.load_sprite_images('invader1.png',32)
-#    invader2_images = resource_loader.load_sprite_images('invader2.png',32)
-#    exp_images = resource_loader.load_sprite_images('exp.png',32)
-#    bullet1 = pygame.image.load('../gfx/bullet1.png')  
-#    
-#    laser_sound = resource_loader.load_sound('lazer1.wav')
-#    explosion_sound = resource_loader.load_sound('explode1.wav')
-#    
-#    #loading function would be implemented to load those settings from xmlfiles
-#    invader1_properties = Invader_Properties(invader1_images,exp_images,explosion_sound,5,0,0,2,10)
-#    invader2_properties = Invader_Properties(invader2_images,exp_images,explosion_sound,5,0,0,2,20)
-#    #put room for images for the weopon to explode 
-#    bullet1_properties  = Wepon__Properties([bullet1],[],laser_sound,0,10,0,2,5)
-#    
-#    #this background should be replaced by the background image
-#    background = pygame.surface.Surface(screen.get_size()).convert()
-#    background.fill((0, 0, 0))
-    
-#    screen.blit(background, background.get_rect())
-    
-
-        
-#    for i in range(MAX_INVADERS):
-#        invaders.append(invader.Invader(invader1_properties))
-#        invaders.append(invader.Invader(invader2_properties))
-    
-#    p = player.Player()
+     
     #init the font module and load the font
+    
     if pygame.font:        
         pygame.font.init()
         font = pygame.font.Font('../gfx/04b_25__.ttf', 12)
@@ -170,8 +134,10 @@ def main():
         
         if title_screen:
             screen.blit(background, background.get_rect())
-
-            screen.blit(font_title.render("PyInvaders", 0, Red), (height/2 - 100, 50))
+            title = font_title.render('PyInvaders',0,Red)
+            title_pos = title.get_rect(centerx=background.get_width()/2,centery=100)
+            screen.blit(title,title_pos)
+            #screen.blit(font_title.render("PyInvaders", 0, Red), (height/2 - 100, 50))
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -201,13 +167,22 @@ def main():
                     
                         
             #handling menu choice switching
-            if menu_choice == 0:
-                screen.blit(font_big.render("Start", 0, Red), (height/2 - 4, 150))
-                screen.blit(font_big.render("Exit", 0, Blue), (height/2 - 4, 180))
-            else:
-                screen.blit(font_big.render("Start", 0, Blue), (height/2 - 4, 150))
-                screen.blit(font_big.render("Exit", 0, Red), (height/2 - 4, 180))
 
+            if menu_choice == 0:
+                start_color = Red
+                exit_color = Blue
+            else:
+                start_color = Blue
+                exit_color = Red
+ 
+            start_txt = font_big.render('Start',0,start_color)
+            start_txt_pos = start_txt.get_rect(centerx=background.get_width()/2,centery=background.get_height()/2)
+            screen.blit(start_txt,start_txt_pos)
+                
+            start_txt = font_big.render('Exit',0,exit_color)
+            start_txt_pos = start_txt.get_rect(centerx=background.get_width()/2,centery=background.get_height()/2 +30 )
+            screen.blit(start_txt,start_txt_pos)
+            
         clock.tick(FPS)
         pygame.display.flip()
         screen.blit(background, background.get_rect())
@@ -222,17 +197,12 @@ def main():
             screen.blit(background, p.rect)
             
             #clearing in active bullets
-            bullets_to_remove = filter(lambda b : b.destroyed,bullets)
-            
+            bullets_to_remove = filter(lambda b : b.destroyed,bullets)            
             for b in bullets_to_remove:
                 screen.blit(background,b.rect)
                 bullets.remove(b)
-#            for b in bullets:
-#                if not b.active:
-#                    bullets_to_remove.append(b)
 
-            invaders_to_remove = filter(lambda i : i.dead, invaders)
-                
+            invaders_to_remove = filter(lambda i : i.dead, invaders)                
             for i in invaders_to_remove:
                 screen.blit(background, i.rect)
                 invaders.remove(i)
@@ -263,7 +233,22 @@ def main():
 
                     #Fire bullets
                     if event.key == pygame.K_z:
-                        bullets.append(bullet.Bullet(bullet1_properties,p.rect.midtop))
+                        x,y = p.rect.midtop
+#                        bullets.append(bullet.Bullet(bullet1_properties,(x+15,y)))
+#                        bullets.append(bullet.Bullet(bullet1_properties,(x-15,y)))
+#                        bullets.append(bullet.Bullet(bullet1_properties,(x,y)))
+#                       
+                        b =  bullet.Bullet(bullet1_properties,(x+15,y))
+                        b.vectorX = 3
+                        bullets.append(b) 
+                        
+                        b =  bullet.Bullet(bullet1_properties,(x-15,y))
+                        b.vectorX = -3
+                        bullets.append(b) 
+#                        
+                        b =  bullet.Bullet(bullet1_properties,(x,y))
+                        bullets.append(b) 
+                        
                         #laser_sound.play()
                         
                 if event.type == pygame.MOUSEBUTTONDOWN:

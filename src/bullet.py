@@ -1,4 +1,4 @@
-import pygame,resource_loader
+import pygame
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, properties,player_pos = 0):
@@ -8,20 +8,20 @@ class Bullet(pygame.sprite.Sprite):
         self.image = properties.anim_images[0]
         self.area = pygame.display.get_surface()
         self.area_rect = self.area.get_rect()
-
-        #self.velocity = 35
-        #self.damage   = 10
         
         self.active = True
         
-        #self.ANIM_DELAY = 2
+        self.vectorX = self.properties.vectorX
+        self.vectorY = self.properties.vectorY
+        
         self.anim_frame = 0
         self.anim_delay_count = 0
         self.destroyed = False
         self.exploding = False
         self.sound_playing = False
         
-        self.rect = self.image.get_rect().move(player_pos) #player pos is a tuple of x, y
+        self.rect = self.image.get_rect()
+        self.rect.midtop = player_pos
         self.properties.sound.play()
         
     def update(self):
@@ -64,7 +64,7 @@ class Bullet(pygame.sprite.Sprite):
             self.anim_frame += 1     
              
     def _move(self):
-        newpos = self.rect.move((self.properties.vectorX,-self.properties.vectorY))        
+        newpos = self.rect.move((self.vectorX,-self.vectorY))        
         if not self.area_rect.contains(newpos): self.destroyed = False
         self.rect = newpos
 
