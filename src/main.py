@@ -19,8 +19,9 @@ input_type   = True
 player_score = 0
 
 #Color constants
-Red = (255, 0, 0)
-Blue = (0, 0, 255)
+Red    = (255, 0, 0)
+Blue   = (0, 0, 255)
+Yellow = (225,255,0)
 
 clock  = pygame.time.Clock()
 screen = pygame.display.set_mode(SIZE)
@@ -53,7 +54,7 @@ def Init_Env():
     #this background should be replaced by the background image
     #background = pygame.surface.Surface(screen.get_size()).convert()
     #background.fill((0, 0, 0))
-    background = resource_loader.load_image('Wallpaper.jpg')
+    background = resource_loader.load_image('wallpaper2.jpg')
     screen.blit(background, background.get_rect())
 
 def Init_Game():
@@ -79,9 +80,9 @@ def Init_Game():
     bullet1 = pygame.image.load('../gfx/bullet1.png')  
     
     laser_sound = resource_loader.load_sound('lazer1.wav')
-    laser_sound.set_volume(0.3)
+    laser_sound.set_volume(0.1)
     explosion_sound = resource_loader.load_sound('explode1.wav')
-    explosion_sound.set_volume(0.2)
+    explosion_sound.set_volume(0.1)
     #loading function would be implemented to load those settings from xmlfiles
     invader1_properties = Invader_Properties(invader1_images,exp_images,explosion_sound,5,0,0,2,10)
     invader2_properties = Invader_Properties(invader2_images,exp_images,explosion_sound,5,0,0,2,20)
@@ -95,7 +96,7 @@ def Init_Game():
         invaders.append(invader.Invader(invader2_properties))
     
     p = player.Player()
-    pygame.mixer.music.load('../sounds/z.mp3')
+    pygame.mixer.music.load('../sounds/game_music.mp3')
     pygame.mixer.music.set_volume(0.1)
     pygame.mixer.music.play(-1,0.0)
     
@@ -205,11 +206,13 @@ def main():
             bullets_to_remove = filter(lambda b : b.destroyed,bullets)            
             for b in bullets_to_remove:
                 #screen.blit(background,b.rect,b.rect)
+                
                 bullets.remove(b)
 
             invaders_to_remove = filter(lambda i : i.dead, invaders)                
             for i in invaders_to_remove:
                 screen.blit(background, i.rect,i.rect)
+                player_score += 1
                 invaders.remove(i)
             
             #watching for key events   
@@ -261,25 +264,37 @@ def main():
                         #laser_sound.play()
                         
             #hints and shortcuts to be printed
-            screen.blit(font.render("Press k to switch input", 0, Red), (460, 5))
+            switch_input_txt = font.render('Press k to switch input',1,Yellow)
+            switch_input_txt_pos = switch_input_txt.get_rect(topright = (screen.get_width()-10,10))
+            screen.blit(switch_input_txt,switch_input_txt_pos)
+                        
+            if input_type:
+                current_input_txt = font.render('current input: keyboard',1,Red)
+                current_input_txt_pos = current_input_txt.get_rect(centerx=switch_input_txt_pos.centerx,top = 25)
+                screen.blit(current_input_txt,current_input_txt_pos)
 
-            if input_type is True:
-                screen.blit(font.render("current input: " + "keyboard", 0, Blue), (465, 20))
-            
+                
             else:
-                screen.blit(font.render("current input: " + "mouse", 0, Red), (465, 20))
+                #screen.blit(font.render("current input: " + "mouse", 1, Red), (465, 20))
+                current_input_txt = font.render('current input: mouse',1,Red)
+                current_input_txt_pos = current_input_txt.get_rect(centerx=switch_input_txt_pos.centerx,top = 25)
+                screen.blit(current_input_txt,current_input_txt_pos)
+               
+            score_input_txt = font_big.render('Score : '+ str(player_score),1,Yellow)
+            score_input_txt_pos = score_input_txt.get_rect(topleft = (10,10))
+            screen.blit(score_input_txt,score_input_txt_pos)
 
-            screen.blit(font_big.render("Score: " + str(player_score), 0, Red), (5, 5))         
-
+            
             p.update(input_type)            
             screen.blit(p.image, p.rect)
 
             for i in invaders:               
-                l = len(i.hit_test(bullets))
-                player_score += l
-                if l > 0 : 
+                #l = len(i.hit_test(bullets))
+                #player_score += l
+                #if l > 0 : 
                     #explosion_sound.play()
-                    pass
+                #    pass
+                i.hit_test(bullets)
                 i.update()
                 screen.blit(i.image,i.rect)
                     
