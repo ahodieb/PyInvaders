@@ -77,17 +77,17 @@ def Init_Game():
     invader1_images = resource_loader.load_sprite_images('invader1.png',32)
     invader2_images = resource_loader.load_sprite_images('invader2.png',32)
     exp_images = resource_loader.load_sprite_images('exp.png',32)
-    bullet1 = pygame.image.load('../gfx/bullet1.png')  
+    bullet1 = pygame.image.load('../gfx/bullet2.png')  
     
     laser_sound = resource_loader.load_sound('lazer1.wav')
     laser_sound.set_volume(0.1)
     explosion_sound = resource_loader.load_sound('explode1.wav')
     explosion_sound.set_volume(0.1)
     #loading function would be implemented to load those settings from xmlfiles
-    invader1_properties = Invader_Properties(invader1_images,exp_images,explosion_sound,5,0,0,2,10)
-    invader2_properties = Invader_Properties(invader2_images,exp_images,explosion_sound,5,0,0,2,20)
+    invader1_properties = Invader_Properties(invader1_images,exp_images,explosion_sound,5,0,0,2,10,1)
+    invader2_properties = Invader_Properties(invader2_images,exp_images,explosion_sound,5,0,0,2,20,2)
     #put room for images for the weopon to explode 
-    bullet1_properties  = Wepon__Properties([bullet1],[],laser_sound,0,10,0,2,5)
+    bullet1_properties  = Wepon__Properties([bullet1],[],laser_sound,0,10,0,2,10)
     
 
     
@@ -206,13 +206,12 @@ def main():
             bullets_to_remove = filter(lambda b : b.destroyed,bullets)            
             for b in bullets_to_remove:
                 #screen.blit(background,b.rect,b.rect)
-                
                 bullets.remove(b)
 
             invaders_to_remove = filter(lambda i : i.dead, invaders)                
             for i in invaders_to_remove:
                 screen.blit(background, i.rect,i.rect)
-                player_score += 1
+                player_score += i.properties.score
                 invaders.remove(i)
             
             #watching for key events   

@@ -1,5 +1,5 @@
 class Invader_Properties(object):
-    def __init__(self,anim_images,exp_images,sound,vectorX=0,vectorY=0,movment_type=0,ANIM_DELAY =2,health =10):
+    def __init__(self,anim_images,exp_images,sound,vectorX=0,vectorY=0,movment_type=0,ANIM_DELAY =2,health =10,score=1):
         
         self.anim_images  = anim_images
         self.exp_images   = exp_images        
@@ -12,6 +12,8 @@ class Invader_Properties(object):
         
         self.ANIM_DELAY   = ANIM_DELAY
         self.health       = health
+        
+        self.score        = score
         
 class Wepon__Properties(object):
     def __init__(self,anim_images,exp_images,sound,vectorX=0,vectorY=0,movment_type=0,ANIM_DELAY =2,damage =10):
