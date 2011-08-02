@@ -20,8 +20,8 @@ player_score = 0
 
 #Color constants
 Red    = (255, 0, 0)
-Blue   = (0, 0, 255)
-Yellow = (225,255,0)
+Blue   = (120, 190, 231)
+Yellow = (247,250,0)
 
 clock  = pygame.time.Clock()
 screen = pygame.display.set_mode(SIZE)
@@ -94,6 +94,10 @@ def Init_Game():
     for i in xrange(MAX_INVADERS):
         invaders.append(invader.Invader(invader1_properties))
         invaders.append(invader.Invader(invader2_properties))
+
+    #creating title invaders
+    title_invader1_image = resource_loader.load_image('wallpaper2.jpg')
+    title_invader1 = screen_blit(title_invader1_image, title_invader1_image.get_rect())
     
     p = player.Player()
     pygame.mixer.music.load('../sounds/game_music.mp3')
@@ -125,11 +129,10 @@ def main():
     #Init_Game()
      
     #init the font module and load the font
-    
     if pygame.font:        
         pygame.font.init()
         font = pygame.font.Font('../gfx/04b_25__.ttf', 12)
-        font_big = pygame.font.Font('../gfx/04b_25__.ttf', 18)
+        font_big = pygame.font.Font('../gfx/04b_25__.ttf', 25)
         font_title = pygame.font.Font('../gfx/04b_25__.ttf', 50)
 
     while main_loop:
@@ -140,10 +143,14 @@ def main():
         
         if title_screen:
             screen.blit(background, background.get_rect())
-            title = font_title.render('PyInvaders',1,Red)
-            title_pos = title.get_rect(centerx=screen.get_width()/2,centery=100)
-            screen.blit(title,title_pos)
+            #title = font_title.render('PyInvaders',1,Red)
+            #title_pos = title.get_rect(centerx=screen.get_width()/2,centery=100)
+            #screen.blit(title,title_pos)
             #screen.blit(font_title.render("PyInvaders", 0, Red), (height/2 - 100, 50))
+
+            #title screen invaders
+            #title_invader1.move_ip()
+
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -175,18 +182,18 @@ def main():
             #handling menu choice switching
 
             if menu_choice == 0:
-                start_color = Red
+                start_color = Yellow
                 exit_color = Blue
             else:
                 start_color = Blue
-                exit_color = Red
+                exit_color = Yellow
  
-            start_txt = font_big.render('Start',1,start_color)
-            start_txt_pos = start_txt.get_rect(centerx=screen.get_width()/2,centery=screen.get_height()/2)
+            start_txt = font_big.render('Start',1, start_color)
+            start_txt_pos = start_txt.get_rect(centerx=669,centery=475)
             screen.blit(start_txt,start_txt_pos)
                 
-            start_txt = font_big.render('Exit',1,exit_color)
-            start_txt_pos = start_txt.get_rect(centerx=screen.get_width()/2,centery=screen.get_height()/2 +30 )
+            start_txt = font_big.render('Exit',1, exit_color)
+            start_txt_pos = start_txt.get_rect(centerx=669,centery=510)
             screen.blit(start_txt,start_txt_pos)
             
         clock.tick(FPS)
