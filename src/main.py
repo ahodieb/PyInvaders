@@ -9,7 +9,7 @@ from properties import *
 
 FPS = 60
 MAX_INVADERS = 5
-SIZE = height, width = 900, 560
+SIZE =  900, 560
 
 main_loop    = True
 title_screen = True
@@ -51,8 +51,9 @@ def Init_Env():
     pygame.mouse.set_visible(0)
     
     #this background should be replaced by the background image
-    background = pygame.surface.Surface(screen.get_size()).convert()
-    background.fill((0, 0, 0))
+    #background = pygame.surface.Surface(screen.get_size()).convert()
+    #background.fill((0, 0, 0))
+    background = resource_loader.load_image('Wallpaper.jpg')
     screen.blit(background, background.get_rect())
 
 def Init_Game():
@@ -78,8 +79,9 @@ def Init_Game():
     bullet1 = pygame.image.load('../gfx/bullet1.png')  
     
     laser_sound = resource_loader.load_sound('lazer1.wav')
+    laser_sound.set_volume(0.3)
     explosion_sound = resource_loader.load_sound('explode1.wav')
-    
+    explosion_sound.set_volume(0.2)
     #loading function would be implemented to load those settings from xmlfiles
     invader1_properties = Invader_Properties(invader1_images,exp_images,explosion_sound,5,0,0,2,10)
     invader2_properties = Invader_Properties(invader2_images,exp_images,explosion_sound,5,0,0,2,20)
@@ -93,6 +95,9 @@ def Init_Game():
         invaders.append(invader.Invader(invader2_properties))
     
     p = player.Player()
+    pygame.mixer.music.load('../sounds/z.mp3')
+    pygame.mixer.music.set_volume(0.1)
+    pygame.mixer.music.play(-1,0.0)
     
 def main():
     global main_loop  
@@ -134,8 +139,8 @@ def main():
         
         if title_screen:
             screen.blit(background, background.get_rect())
-            title = font_title.render('PyInvaders',0,Red)
-            title_pos = title.get_rect(centerx=background.get_width()/2,centery=100)
+            title = font_title.render('PyInvaders',1,Red)
+            title_pos = title.get_rect(centerx=screen.get_width()/2,centery=100)
             screen.blit(title,title_pos)
             #screen.blit(font_title.render("PyInvaders", 0, Red), (height/2 - 100, 50))
             
@@ -175,12 +180,12 @@ def main():
                 start_color = Blue
                 exit_color = Red
  
-            start_txt = font_big.render('Start',0,start_color)
-            start_txt_pos = start_txt.get_rect(centerx=background.get_width()/2,centery=background.get_height()/2)
+            start_txt = font_big.render('Start',1,start_color)
+            start_txt_pos = start_txt.get_rect(centerx=screen.get_width()/2,centery=screen.get_height()/2)
             screen.blit(start_txt,start_txt_pos)
                 
-            start_txt = font_big.render('Exit',0,exit_color)
-            start_txt_pos = start_txt.get_rect(centerx=background.get_width()/2,centery=background.get_height()/2 +30 )
+            start_txt = font_big.render('Exit',1,exit_color)
+            start_txt_pos = start_txt.get_rect(centerx=screen.get_width()/2,centery=screen.get_height()/2 +30 )
             screen.blit(start_txt,start_txt_pos)
             
         clock.tick(FPS)
@@ -194,17 +199,17 @@ def main():
         if game_loop:       
             
             #clearing screen
-            screen.blit(background, p.rect)
+            screen.blit(background, p.rect,p.rect)
             
             #clearing in active bullets
             bullets_to_remove = filter(lambda b : b.destroyed,bullets)            
             for b in bullets_to_remove:
-                screen.blit(background,b.rect)
+                #screen.blit(background,b.rect,b.rect)
                 bullets.remove(b)
 
             invaders_to_remove = filter(lambda i : i.dead, invaders)                
             for i in invaders_to_remove:
-                screen.blit(background, i.rect)
+                screen.blit(background, i.rect,i.rect)
                 invaders.remove(i)
             
             #watching for key events   
@@ -222,8 +227,7 @@ def main():
                     if event.key == pygame.K_p:
                         for i in invaders:
                             i.active = not i.active
-                            #i.rect.top = random.randint(0, (height - 64) / 32) * 32
-                            #i.rect.left = -32
+                            
                         for b in bullets :
                             b.active = not b.active
 
