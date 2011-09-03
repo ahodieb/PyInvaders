@@ -71,4 +71,3 @@ class Bullet(pygame.sprite.Sprite):
  
 #    def __del__(self):
 #        print 'bullet removed'
- 
